@@ -1,40 +1,39 @@
 #!/bin/bash
 # ==================================================
 # USER DATA - Script d'installation automatique
-# Exécuté une seule fois au premier démarrage de l'EC2
-# Les variables $${...} sont injectées par Terraform (templatefile)
+# Execute une seule fois au premier demarrage de l'EC2
+# Les variables $${...} sont injectees par Terraform (templatefile)
 # ==================================================
 
-# Activation des logs pour déboguer si nécessaire
 exec > /var/log/userdata.log 2>&1
-set -e # Stoppe le script si une commande échoue
+set -e
 
-echo "=== Début de l'installation Nextcloud ==="
+echo "=== Debut de l'installation Nextcloud ==="
 
-# --- Mise à jour du système ---
+# --- Mise a jour du systeme ---
 dnf update -y
 
-# --- Installation des dépendances ---
+# --- Installation des dependances ---
 dnf install -y \
   httpd \
-  php8.2 \
-  php8.2-mysqlnd \
-  php8.2-gd \
-  php8.2-xml \
-  php8.2-mbstring \
-  php8.2-zip \
-  php8.2-curl \
-  php8.2-intl \
-  php8.2-bcmath \
-  php8.2-gmp \
-  php8.2-imagick \
-  php8.2-opcache \
+  php8.4 \
+  php8.4-mysqlnd \
+  php8.4-gd \
+  php8.4-xml \
+  php8.4-mbstring \
+  php8.4-zip \
+  php8.4-curl \
+  php8.4-intl \
+  php8.4-bcmath \
+  php8.4-gmp \
+  php8.4-imagick \
+  php8.4-opcache \
   mysql \
   wget \
   unzip
 
 # --- Téléchargement de Nextcloud ---
-echo "=== Téléchargement de Nextcloud ==="
+echo "=== Telechargement de Nextcloud ==="
 wget -q https://download.nextcloud.com/server/releases/latest.zip -O /tmp/nextcloud.zip
 unzip -q /tmp/nextcloud.zip -d /var/www/html/
 chown -R apache:apache /var/www/html/nextcloud
@@ -50,7 +49,7 @@ cat > /etc/httpd/conf.d/nextcloud.conf << 'EOF'
         Options +FollowSymlinks
         AllowOverride All
         Require all granted
-        
+
         <IfModule mod_dav.c>
             Dav off
         </IfModule>
@@ -61,7 +60,7 @@ cat > /etc/httpd/conf.d/nextcloud.conf << 'EOF'
 </VirtualHost>
 EOF
 
-# --- Configuration PHP optimisée pour Nextcloud ---
+# --- Configuration PHP optimisee pour Nextcloud ---
 cat > /etc/php.d/nextcloud.ini << 'EOF'
 memory_limit = 512M
 upload_max_filesize = 512M
@@ -78,7 +77,6 @@ EOF
 echo "=== Installation de Nextcloud ==="
 cd /var/www/html/nextcloud
 
-# La commande occ permet de configurer Nextcloud en ligne de commande
 sudo -u apache php occ maintenance:install \
   --database      "mysql" \
   --database-host "${db_host}" \
@@ -89,7 +87,7 @@ sudo -u apache php occ maintenance:install \
   --admin-pass    "NextcloudAdmin123!" \
   --data-dir      "/var/www/html/nextcloud/data"
 
-# --- Configuration du stockage S3 comme stockage primaire ---
+# --- Configuration du stockage S3 ---
 echo "=== Configuration du stockage S3 ==="
 sudo -u apache php occ config:system:set \
   objectstore class \
@@ -113,15 +111,15 @@ sudo -u apache php occ config:system:set \
   --value=false \
   --type=boolean
 
-# Utilise le rôle IAM de l'instance (pas besoin de clés AWS en dur !)
+# Utilise le role IAM de l'instance (pas besoin de cles AWS en dur !)
 sudo -u apache php occ config:system:set \
   objectstore arguments use_instance_credentials \
   --value=true \
   --type=boolean
 
-# --- Démarrage et activation des services ---
+# --- Demarrage et activation des services ---
 systemctl enable httpd
 systemctl start httpd
 
-echo "=== Installation terminée ! ==="
+echo "=== Installation terminee ! ==="
 echo "Nextcloud accessible sur http://$$(curl -s http://169.254.169.254/latest/meta-data/public-ipv4)"
