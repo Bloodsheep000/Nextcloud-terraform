@@ -121,3 +121,17 @@ systemctl start httpd
 
 echo "=== Installation terminee ! ==="
 echo "Nextcloud accessible sur http://$$(curl -s http://169.254.169.254/latest/meta-data/public-ipv4)"
+
+# --- Configuration des trusted_domains ---
+sudo -u apache php /var/www/nextcloud/occ config:system:set \
+  trusted_domains 0 \
+  --value="localhost"
+
+sudo -u apache php /var/www/nextcloud/occ config:system:set \
+  trusted_domains 1 \
+  --value="$(curl -s http://169.254.169.254/latest/meta-data/public-ipv4)"
+
+sudo -u apache php /var/www/nextcloud/occ config:system:set \
+  trusted_domains 2 \
+  --value="$(curl -s http://169.254.169.254/latest/meta-data/public-hostname)"
+
