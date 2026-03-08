@@ -22,13 +22,11 @@ dnf install -y \
   php8.4-xml \
   php8.4-mbstring \
   php8.4-zip \
-  php8.4-curl \
   php8.4-intl \
   php8.4-bcmath \
   php8.4-gmp \
-  php8.4-imagick \
   php8.4-opcache \
-  mysql \
+  mysql8.0 \
   wget \
   unzip
 
