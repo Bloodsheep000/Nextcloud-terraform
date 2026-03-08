@@ -2,7 +2,7 @@
 # ==================================================
 # USER DATA - Script d'installation automatique
 # Exécuté une seule fois au premier démarrage de l'EC2
-# Les variables ${...} sont injectées par Terraform (templatefile)
+# Les variables $${...} sont injectées par Terraform (templatefile)
 # ==================================================
 
 # Activation des logs pour déboguer si nécessaire
