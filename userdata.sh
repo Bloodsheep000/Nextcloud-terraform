@@ -124,4 +124,4 @@ systemctl enable httpd
 systemctl start httpd
 
 echo "=== Installation terminée ! ==="
-echo "Nextcloud accessible sur http://$(curl -s http://169.254.169.254/latest/meta-data/public-ipv4)"
+echo "Nextcloud accessible sur http://$$(curl -s http://169.254.169.254/latest/meta-data/public-ipv4)"
