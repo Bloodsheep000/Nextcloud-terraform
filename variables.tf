@@ -45,7 +45,7 @@ variable "instance_type" {
 variable "ami_id" {
   description = "Image système (Amazon Linux 2023)"
   type        = string
-  default     = "ami-00575c0cbc20caf50" # Amazon Linux 2023 - eu-west-3
+  default     = "ami-05d43d5e94bb6eb95" # Amazon Linux 2023 - eu-west-3
 }
 
 variable "key_pair_name" {
