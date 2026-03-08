@@ -26,7 +26,7 @@ dnf install -y \
   php8.4-bcmath \
   php8.4-gmp \
   php8.4-opcache \
-  mysql8.0 \
+  mariadb105 \
   wget \
   unzip
 
