@@ -301,9 +301,9 @@ aws sts get-caller-identity
 
 ## 👤 Auteur
 
-**[Votre Nom]**  
-BTS SIO SISR - [Votre établissement]  
-Année scolaire 2024-2025
+**Hugo Léonardi**  
+BTS SIO SISR - Aurlom
+2024-2026
 
 ---
 
